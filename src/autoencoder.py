@@ -3,6 +3,7 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 import torch.nn.init as init
+import argparse
 
 import torch.nn.functional as F
 from torch.utils.data import Dataset, DataLoader
@@ -12,14 +13,26 @@ import numpy as np
 
 print('###Starting script###')
 print('torch version: {}'.format(torch.__version__))
-print('Device count: {}'.format(torch.cuda.device_count()))
+print('Number CUDA Devices: {}'.format(torch.cuda.device_count()))
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--batchsize', type=int, default=128)
+parser.add_argument('--nepochs', type=int, default=50)
+args = parser.parse_args()
+
+n_epochs = args.nepochs
+batch_size = args.batchsize
+
+print('batch size: {}'.format(batch_size))
+print('epochs: {}'.format(n_epochs))
+
+
 class z24Dataset(Dataset):
-    def __init__(self, mode='training', window_size=100, lookahead=1, normalize=True):
+    def __init__(self, mode='training', window_size=100, normalize=True):
         self.window_size = window_size
-        self.lookahead = lookahead
         self.slices_per_file = 65536 // self.window_size
         self.normalize = normalize
         
@@ -49,38 +62,36 @@ class z24Dataset(Dataset):
         X_environmental = np.load(file='../data/z24_clean/'+file_to_read+'_env.npy')
         
         X_vibration_window = X_vibration[index_in_dataframe:index_in_dataframe+self.window_size,:]
-        Y = X_vibration[index_in_dataframe+self.window_size+1,:]
-        
+
         if self.normalize:
             X_vibration_window = (X_vibration_window - self.vibration_mean) / self.vibration_std
             X_environmental = (X_environmental - self.env_mean) / self.env_std
         
-        #return X_vibration_window, X_environmental, Y
-        return X_vibration_window.flatten(), Y
-    
-
-# Neural Network Model
-
+        X_vib_and_env = np.append(X_vibration_window.flatten(),X_environmental)
+       
+        return X_vib_and_env, X_vibration_window
+        
 class Model(nn.Module):
-    def __init__(self, input_size, hidden_width, n_hidden_layers, output_size, dropout_p):
+    def __init__(self, input_size, hidden_size, z_size, output_size, dropout_p):
         super(Model, self).__init__()
         self.dropout_p = dropout_p
-        self.n_hidden_layers = n_hidden_layers
-        
-        self.layers = nn.ModuleList([nn.Linear(input_size, hidden_width)])
-        for _ in range(1, self.n_hidden_layers):
-            self.layers.extend([nn.Linear(hidden_width, hidden_width)])
-        self.layers.append(nn.Linear(hidden_width, output_size))
+
+        self.h1 = nn.Linear(input_size, hidden_size)
+        self.z  = nn.Linear(hidden_size, z_size)
+        self.h2 = nn.Linear(z_size, hidden_size)
+        self.h3 = nn.Linear(hidden_size, output_size)
 
     def forward(self, x):
-        for layer in self.layers[:-1]:
-            x = F.dropout(x, p=self.dropout_p, training=True)
-            x = F.relu(layer(x))
-        #no dropout for last layer
-        output = self.layers[-1](x)
+        x = F.dropout(x, p=self.dropout_p, training=True)
+        x = F.leaky_relu(self.h1(x))
+        x = F.dropout(x, p=self.dropout_p, training=True)
+        x = F.leaky_relu(self.z(x))
+        x = F.dropout(x, p=self.dropout_p, training=True)
+        x = F.leaky_relu(self.h2(x))
+        x = F.dropout(x, p=self.dropout_p, training=True)
+        x = self.h3(x)
+        return x
         
-        return output
-    
 class Initializer:
     # to apply xavier_uniform:
     #Initializer.initialize(model=net, initialization=init.xavier_uniform_, gain=init.calculate_gain('relu'))
@@ -99,47 +110,47 @@ class Initializer:
                 except:
                     pass
         model.apply(weights_init)
-        
+
 def count_parameters(model):
     return sum(p.numel() for p in model.parameters() if p.requires_grad)
-    
 
 #Datasets
-training_dataset = z24Dataset(mode='training', window_size=100, lookahead=1, normalize=True)
-training_dataloader = DataLoader(training_dataset, batch_size=8, shuffle=True, num_workers=4)
+training_dataset = z24Dataset(mode='training', window_size=100, normalize=True)
+training_dataloader = DataLoader(training_dataset, batch_size=batch_size, shuffle=True, num_workers=4)
 
-validating_dataset = z24Dataset(mode='validating', window_size=100, lookahead=1, normalize=True)
-validating_dataloader = DataLoader(validating_dataset, batch_size=8, shuffle=False, num_workers=4)
-        
-#Hyperparameters for model
-width = 50
-depth = 2
-l2 = 0.00001
+validating_dataset = z24Dataset(mode='validating', window_size=100, normalize=True)
+validating_dataloader = DataLoader(validating_dataset, batch_size=batch_size, shuffle=False, num_workers=4)
+
+#hyperparameters
 dropout_p = 0.1
-learning_rate = 0.01
+learning_rate = 0.001
 weight_decay = 1e-6
-batch_size = 8
-n_epochs = 5
-weight_init = init.xavier_uniform_
+weight_init = init.xavier_normal_
+hidden_size = 100
+z_size = 50
 
 #define model
 model = Model(input_size=7*100,
-              hidden_width=500,
-              n_hidden_layers = 1,
-              output_size=7,
-              dropout_p = 0.1).to(device)
-
+              hidden_size=hidden_size,
+              z_size=z_size,
+              output_size=7*100,
+              dropout_p=dropout_p).to(device)
 
 Initializer.initialize(model=model, initialization=weight_init)
 
-#optimizer = torch.optim.SGD(model.parameters(),lr=learning_rate, weight_decay=weight_decay, momentum=momentum)
-optimizer = torch.optim.Adam(model.parameters(), lr=0.0001, betas=(0.9, 0.99), eps=1e-08, weight_decay=0, amsgrad=True)
+optimizer = torch.optim.Adam(model.parameters(),
+                            lr=learning_rate,
+                            betas=(0.9, 0.99),
+                            eps=1e-08,
+                            weight_decay=0,
+                            amsgrad=True)
+                            
 loss_criterion = torch.nn.MSELoss()
+
 
 #training
 train_loss = []
-n_epochs = 10
-
+val_loss   = []
 for epoch in range(n_epochs):
     batchloss_train = []
     
@@ -157,9 +168,22 @@ for epoch in range(n_epochs):
         
     #scheduler.step()
     train_loss.append(np.mean(batchloss_train))
+    
+    batchloss_val = []
+    with torch.no_grad():
+        for X_val, Y_val in validating_dataloader:
+            X_val_tensor = X_val.float().to(device)
+            Y_val_tensor = Y_val.float().to(device)
+            predicted_Y = model(X_val_tensor)
+            valloss = loss_criterion(predicted_Y, Y_val_tensor)
+            batchloss_val.append(valloss.item())
+        
+    #scheduler.step()
+    val_loss.append(np.mean(batchloss_val))
+    
     print('Epoch: {}'.format(epoch))
     print('train loss: {}'.format(np.mean(batchloss_train)))
+    print('valiation loss: {}'.format(np.mean(batchloss_val)))
     
 #save trained model
-with open('../results/trained_model.pt','w') as f:
-    torch.save(model, f)
+torch.save(model, '../results/trained_autoencoder.pt')

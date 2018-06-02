@@ -17,12 +17,20 @@ for name in sorted_filenames:
     final.append(temp)
     
 shuffle(final)
-split_index = int(0.8 * len(final))
-train_index = final[:split_index]
-test_index = final[split_index:]
+train_split = int(0.8 * len(final))
+train_index = final[:train_split]
+rest = final[train_split:]
+
+val_split = int(0.5 * len(rest))
+test_index = rest[:val_split]
+validation_index = rest[val_split:]
+
    
-with open('training_set_index.txt', 'w') as file:
+with open('../tools/training_set_index.txt', 'w') as file:
     file.write('\n'.join(train_index))
     
-with open('test_set_index.txt', 'w') as file:
+with open('../tools/test_set_index.txt', 'w') as file:
     file.write('\n'.join(test_index))
+    
+with open('../tools/validation_set_index.txt', 'w') as file:
+    file.write('\n'.join(validation_index))
