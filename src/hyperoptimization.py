@@ -57,10 +57,12 @@ class z24Dataset(Dataset):
         file_to_read = self.name_index_dict[index_to_read]
         index_in_dataframe = (index - index_to_read*self.slices_per_file) * self.window_size
         
-        X_vibration = np.load(file='../data/z24_clean/'+file_to_read+'_vibrations.npy')
-        X_environmental = np.load(file='../data/z24_clean/'+file_to_read+'_env.npy')
+        file_path_vib = '../data/z24_clean/'+file_to_read+'_vibrations.npy'
+        file_path_env = '../data/z24_clean/'+file_to_read+'_env.npy'
+        X_vib_memmap = np.load(file_path_vib, mmap_mode='r')
+        X_environmental = np.load(file_path_env)
         
-        X_vibration_window = X_vibration[index_in_dataframe:index_in_dataframe+self.window_size,:]
+        X_vibration_window = np.array(X_vib_memmap[index_in_dataframe:index_in_dataframe+self.window_size,:])
 
         if self.normalize:
             X_vibration_window = (X_vibration_window - self.vibration_mean) / self.vibration_std
@@ -68,7 +70,7 @@ class z24Dataset(Dataset):
         
         X_vib_and_env = np.append(X_vibration_window.flatten(),X_environmental)
        
-        return X_vib_and_env, X_vibration_window
+        return X_vib_and_env, X_vibration_window.flatten()
         
 class Model(nn.Module):
     def __init__(self, input_size, hidden_size, z_size, output_size, dropout_p):
@@ -124,8 +126,8 @@ validating_dataloader = DataLoader(validating_dataset, batch_size=batch_size, sh
 
 space = {'learning_rate': hp.uniform('learningrate', low=0.00005, high=0.01),
          'dropout_p': hp.uniform('dropout', low=0.05, high=0.3),
-         'hidden_size': hp.quniform('hidden_size', low=50,high=500,q=1),
-         'z_size': hp.quniform('z_size', low=10,high=50,q=1),
+         'hidden_size': hp.quniform('hidden_size', low=100,high=500,q=1),
+         'z_size': hp.quniform('z_size', low=10,high=200,q=1),
          'weight_init': hp.choice('init', [init.xavier_normal_,
                                            init.xavier_uniform_,
                                            init.kaiming_normal_,

@@ -1,0 +1,305 @@
+###Starting script###
+torch version: 0.4.0
+Number CUDA Devices: 1
+batch size: 1280
+epochs: 100
+Epoch: 0
+train loss: 1.4654891689618428
+valiation loss: 1.2958787580331166
+Epoch: 1
+train loss: 1.1739809470517295
+valiation loss: 1.2734551019966602
+Epoch: 2
+train loss: 1.1044711413837613
+valiation loss: 1.2558446091910203
+Epoch: 3
+train loss: 1.0703617447898501
+valiation loss: 1.226146890471379
+Epoch: 4
+train loss: 1.0220021307468414
+valiation loss: 1.1707889810204506
+Epoch: 5
+train loss: 0.9575616476081666
+valiation loss: 1.1037076823413372
+Epoch: 6
+train loss: 0.8956662941546667
+valiation loss: 1.0523393079638481
+Epoch: 7
+train loss: 0.84708390775181
+valiation loss: 1.0112624342242877
+Epoch: 8
+train loss: 0.8102903060969853
+valiation loss: 0.9890065317352613
+Epoch: 9
+train loss: 0.7829344002973466
+valiation loss: 0.966442966212829
+Epoch: 10
+train loss: 0.7585328256800061
+valiation loss: 0.9467038835088412
+Epoch: 11
+train loss: 0.7377797024590629
+valiation loss: 0.9284757735828558
+Epoch: 12
+train loss: 0.719954564457848
+valiation loss: 0.9129940569400787
+Epoch: 13
+train loss: 0.7099428262029376
+valiation loss: 0.9011508499582609
+Epoch: 14
+train loss: 0.6918942850260508
+valiation loss: 0.8865330368280411
+Epoch: 15
+train loss: 0.6846736144451868
+valiation loss: 0.8761719800531864
+Epoch: 16
+train loss: 0.6676899450165885
+valiation loss: 0.8705665903786818
+Epoch: 17
+train loss: 0.6569073909804934
+valiation loss: 0.8604551615814368
+Epoch: 18
+train loss: 0.6484031081199646
+valiation loss: 0.8472379508117834
+Epoch: 19
+train loss: 0.6390056184359959
+valiation loss: 0.842133168131113
+Epoch: 20
+train loss: 0.632069352836836
+valiation loss: 0.8387052317460378
+Epoch: 21
+train loss: 0.6222369216737293
+valiation loss: 0.8207605505983034
+Epoch: 22
+train loss: 0.6137748197430656
+valiation loss: 0.8170366535584132
+Epoch: 23
+train loss: 0.6089241518860772
+valiation loss: 0.8092961025734743
+Epoch: 24
+train loss: 0.6036851881515413
+valiation loss: 0.7990680274864038
+Epoch: 25
+train loss: 0.5970682253440222
+valiation loss: 0.8104258713622888
+Epoch: 26
+train loss: 0.5902967672972452
+valiation loss: 0.7981962238748869
+Epoch: 27
+train loss: 0.5790074339934758
+valiation loss: 0.7985775656998158
+Epoch: 28
+train loss: 0.58043695915313
+valiation loss: 0.7857387786110243
+Epoch: 29
+train loss: 0.5744813290380296
+valiation loss: 0.7881677237649759
+Epoch: 30
+train loss: 0.5688988651548114
+valiation loss: 0.7754296474158764
+Epoch: 31
+train loss: 0.5605189786070869
+valiation loss: 0.7824606671929359
+Epoch: 32
+train loss: 0.5601114077227456
+valiation loss: 0.7855049011607965
+Epoch: 33
+train loss: 0.556049848596255
+valiation loss: 0.7766880020499229
+Epoch: 34
+train loss: 0.5499812016884486
+valiation loss: 0.7649126946926117
+Epoch: 35
+train loss: 0.552895949000404
+valiation loss: 0.764754102875789
+Epoch: 36
+train loss: 0.5437741187356767
+valiation loss: 0.7651659200588862
+Epoch: 37
+train loss: 0.5378203285591943
+valiation loss: 0.7583515681326389
+Epoch: 38
+train loss: 0.5339127324876332
+valiation loss: 0.7537723369896412
+Epoch: 39
+train loss: 0.5341536104679108
+valiation loss: 0.7543624776105086
+Epoch: 40
+train loss: 0.5354164079541252
+valiation loss: 0.7528986781835556
+Epoch: 41
+train loss: 0.5256627578110922
+valiation loss: 0.7467513332764307
+Epoch: 42
+train loss: 0.5276840300787062
+valiation loss: 0.7375510099033514
+Epoch: 43
+train loss: 0.5215787844998496
+valiation loss: 0.7407525057593981
+Epoch: 44
+train loss: 0.5222434202829996
+valiation loss: 0.7393901459872723
+Epoch: 45
+train loss: 0.5159550848461333
+valiation loss: 0.7397234762708346
+Epoch: 46
+train loss: 0.511785565387635
+valiation loss: 0.7332947986821333
+Epoch: 47
+train loss: 0.5099403645311084
+valiation loss: 0.7309969837466875
+Epoch: 48
+train loss: 0.5057279552732196
+valiation loss: 0.7283108575890461
+Epoch: 49
+train loss: 0.507329353973979
+valiation loss: 0.7294414825737476
+Epoch: 50
+train loss: 0.5043831794034868
+valiation loss: 0.7311478108167648
+Epoch: 51
+train loss: 0.5014266400110154
+valiation loss: 0.726305661102136
+Epoch: 52
+train loss: 0.5009080306405113
+valiation loss: 0.7206396982073784
+Epoch: 53
+train loss: 0.496734062121028
+valiation loss: 0.7211379992465178
+Epoch: 54
+train loss: 0.4944309244553248
+valiation loss: 0.7239354538420836
+Epoch: 55
+train loss: 0.48909297798361095
+valiation loss: 0.7122849300503731
+Epoch: 56
+train loss: 0.4869066122032347
+valiation loss: 0.711796178172032
+Epoch: 57
+train loss: 0.48678909419547944
+valiation loss: 0.706444039940834
+Epoch: 58
+train loss: 0.4836374045837493
+valiation loss: 0.7154233064502478
+Epoch: 59
+train loss: 0.48337255347342717
+valiation loss: 0.7151747445265452
+Epoch: 60
+train loss: 0.48187695301714395
+valiation loss: 0.7032770061244568
+Epoch: 61
+train loss: 0.4783445004196394
+valiation loss: 0.7013973065962394
+Epoch: 62
+train loss: 0.48052285043966203
+valiation loss: 0.7008649514367183
+Epoch: 63
+train loss: 0.4729299240169071
+valiation loss: 0.7055720587571462
+Epoch: 64
+train loss: 0.4728411492847261
+valiation loss: 0.7034401148557663
+Epoch: 65
+train loss: 0.47015740332149325
+valiation loss: 0.6979354800035557
+Epoch: 66
+train loss: 0.4711041244722548
+valiation loss: 0.7101901589582363
+Epoch: 67
+train loss: 0.46596924534865786
+valiation loss: 0.6948996006200711
+Epoch: 68
+train loss: 0.4615784542901175
+valiation loss: 0.7029027988513311
+Epoch: 69
+train loss: 0.4642971690211977
+valiation loss: 0.6986919306218624
+Epoch: 70
+train loss: 0.4653791430450621
+valiation loss: 0.696835064018766
+Epoch: 71
+train loss: 0.4611515211207526
+valiation loss: 0.6961939173440138
+Epoch: 72
+train loss: 0.45895494804495857
+valiation loss: 0.6904508260389169
+Epoch: 73
+train loss: 0.4577737418668611
+valiation loss: 0.695143319045504
+Epoch: 74
+train loss: 0.4525430003801982
+valiation loss: 0.6882176070163647
+Epoch: 75
+train loss: 0.4513263755611011
+valiation loss: 0.689297080039978
+Epoch: 76
+train loss: 0.45252068695567904
+valiation loss: 0.6918401451160511
+Epoch: 77
+train loss: 0.4517434984445572
+valiation loss: 0.6810749707122644
+Epoch: 78
+train loss: 0.45069189014888944
+valiation loss: 0.6955799621840318
+Epoch: 79
+train loss: 0.4481715574150994
+valiation loss: 0.6764801405370235
+Epoch: 80
+train loss: 0.450318544393494
+valiation loss: 0.6852086000144482
+Epoch: 81
+train loss: 0.4471758944647653
+valiation loss: 0.6784668546169996
+Epoch: 82
+train loss: 0.4464346120754878
+valiation loss: 0.6721951887011528
+Epoch: 83
+train loss: 0.44165653699920293
+valiation loss: 0.6767373532056808
+Epoch: 84
+train loss: 0.44027493113563176
+valiation loss: 0.6709405276924372
+Epoch: 85
+train loss: 0.44240905273528325
+valiation loss: 0.672641716276606
+Epoch: 86
+train loss: 0.44064790720031377
+valiation loss: 0.6755026473353306
+Epoch: 87
+train loss: 0.4424839736450286
+valiation loss: 0.6740488757689794
+Epoch: 88
+train loss: 0.439294906599181
+valiation loss: 0.6762195738653342
+Epoch: 89
+train loss: 0.43399264557021006
+valiation loss: 0.6709373878935972
+Epoch: 90
+train loss: 0.4381014513117926
+valiation loss: 0.6663807568450769
+Epoch: 91
+train loss: 0.43404969573020935
+valiation loss: 0.67646357913812
+Epoch: 92
+train loss: 0.434020133245559
+valiation loss: 0.669176327685515
+Epoch: 93
+train loss: 0.43174225588639575
+valiation loss: 0.6657277631262938
+Epoch: 94
+train loss: 0.4325640066748574
+valiation loss: 0.6748387211312851
+Epoch: 95
+train loss: 0.43358117200079416
+valiation loss: 0.6652404473473629
+Epoch: 96
+train loss: 0.42790837373052326
+valiation loss: 0.6675963525970777
+Epoch: 97
+train loss: 0.4285524572644915
+valiation loss: 0.6647976910074552
+Epoch: 98
+train loss: 0.4281392807052249
+valiation loss: 0.6669269874691963
+Epoch: 99
+train loss: 0.42663936955588205
+valiation loss: 0.6638252635796865

@@ -3,7 +3,7 @@ import os
 import pandas as pd
 import numpy as np
 from random import shuffle
-
+random.seed(1992)
 
 files = glob.glob("../data/z24zipped/*")
 files.sort(key=os.path.getmtime)

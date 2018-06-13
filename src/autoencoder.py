@@ -58,10 +58,14 @@ class z24Dataset(Dataset):
         file_to_read = self.name_index_dict[index_to_read]
         index_in_dataframe = (index - index_to_read*self.slices_per_file) * self.window_size
         
-        X_vibration = np.load(file='../data/z24_clean/'+file_to_read+'_vibrations.npy')
-        X_environmental = np.load(file='../data/z24_clean/'+file_to_read+'_env.npy')
+        file_path_vib = '../data/z24_clean/'+file_to_read+'_vibrations.npy'
+        file_path_env = '../data/z24_clean/'+file_to_read+'_env.npy'
         
-        X_vibration_window = X_vibration[index_in_dataframe:index_in_dataframe+self.window_size,:]
+        memmap_vib = np.memmap(file_path_vib, dtype=np.float64, mode='r', shape=(65536, 7))
+        memmap_env = np.memmap(file_path_env, dtype=np.float64, mode='r', shape=(53,))
+
+        X_environmental = np.array(memmap_env[:])
+        X_vibration_window = np.array(memmap_vib[index_in_dataframe:index_in_dataframe+self.window_size,:])
 
         if self.normalize:
             X_vibration_window = (X_vibration_window - self.vibration_mean) / self.vibration_std
@@ -69,27 +73,33 @@ class z24Dataset(Dataset):
         
         X_vib_and_env = np.append(X_vibration_window.flatten(),X_environmental)
        
-        return X_vib_and_env, X_vibration_window
+        return X_vib_and_env, X_vibration_window.flatten()
         
 class Model(nn.Module):
-    def __init__(self, input_size, hidden_size, z_size, output_size, dropout_p):
+    def __init__(self, input_size, hidden_size1, hidden_size2, z_size, output_size, dropout_p):
         super(Model, self).__init__()
         self.dropout_p = dropout_p
 
-        self.h1 = nn.Linear(input_size, hidden_size)
-        self.z  = nn.Linear(hidden_size, z_size)
-        self.h2 = nn.Linear(z_size, hidden_size)
-        self.h3 = nn.Linear(hidden_size, output_size)
+        self.h1 = nn.Linear(input_size, hidden_size1)
+        self.h2 = nn.Linear(hidden_size1, hidden_size2)
+        self.z  = nn.Linear(hidden_size2, z_size)
+        self.h4 = nn.Linear(z_size, hidden_size2)
+        self.h5 = nn.Linear(hidden_size2, hidden_size1)
+        self.h6 = nn.Linear(hidden_size1, output_size)
 
     def forward(self, x):
         x = F.dropout(x, p=self.dropout_p, training=True)
         x = F.leaky_relu(self.h1(x))
         x = F.dropout(x, p=self.dropout_p, training=True)
-        x = F.leaky_relu(self.z(x))
-        x = F.dropout(x, p=self.dropout_p, training=True)
         x = F.leaky_relu(self.h2(x))
         x = F.dropout(x, p=self.dropout_p, training=True)
-        x = self.h3(x)
+        x = F.leaky_relu(self.z(x))
+        x = F.dropout(x, p=self.dropout_p, training=True)
+        x = F.leaky_relu(self.h4(x))
+        x = F.dropout(x, p=self.dropout_p, training=True)
+        x = F.leaky_relu(self.h5(x))
+        x = F.dropout(x, p=self.dropout_p, training=True)
+        x = self.h6(x)
         return x
         
 class Initializer:
@@ -116,30 +126,36 @@ def count_parameters(model):
 
 #Datasets
 training_dataset = z24Dataset(mode='training', window_size=100, normalize=True)
-training_dataloader = DataLoader(training_dataset, batch_size=batch_size, shuffle=True, num_workers=4)
+training_dataloader = DataLoader(training_dataset, batch_size=batch_size, shuffle=True, num_workers=8)
 
 validating_dataset = z24Dataset(mode='validating', window_size=100, normalize=True)
-validating_dataloader = DataLoader(validating_dataset, batch_size=batch_size, shuffle=False, num_workers=4)
+validating_dataloader = DataLoader(validating_dataset, batch_size=batch_size, shuffle=False, num_workers=8)
 
 #hyperparameters
-dropout_p = 0.1
-learning_rate = 0.001
-weight_decay = 1e-6
-weight_init = init.xavier_normal_
-hidden_size = 100
-z_size = 50
+hyperspace = {
+'dropout_p': 0.1,
+'learning_rate': 0.005,
+'weight_init': init.kaiming_uniform_,
+'hidden_size1': 256,
+'hidden_size2': 128,
+'z_size': 64}
 
 #define model
-model = Model(input_size=7*100,
-              hidden_size=hidden_size,
-              z_size=z_size,
+model = Model(input_size=7*100+53,
               output_size=7*100,
-              dropout_p=dropout_p).to(device)
+              hidden_size1=hyperspace['hidden_size1'],
+              hidden_size2=hyperspace['hidden_size2'],
+              z_size=hyperspace['z_size'],
+              dropout_p=hyperspace['dropout_p']).to(device)
 
-Initializer.initialize(model=model, initialization=weight_init)
+print(model)
+print(count_parameters(model))
+print(str(hyperspace))
+
+Initializer.initialize(model=model, initialization=hyperspace['weight_init'])
 
 optimizer = torch.optim.Adam(model.parameters(),
-                            lr=learning_rate,
+                            lr=hyperspace['learning_rate'],
                             betas=(0.9, 0.99),
                             eps=1e-08,
                             weight_decay=0,
@@ -186,4 +202,4 @@ for epoch in range(n_epochs):
     print('valiation loss: {}'.format(np.mean(batchloss_val)))
     
 #save trained model
-torch.save(model, '../results/trained_autoencoder.pt')
+torch.save(model, '../results/trained_autoencoder_bigger.pt')
