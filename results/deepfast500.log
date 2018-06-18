@@ -1,0 +1,108 @@
+###Starting script###
+torch version: 0.4.0
+Number CUDA Devices: 1
+batch size: 1000
+epochs: 100
+Model(
+  (h1): Linear(in_features=3553, out_features=512, bias=True)
+  (h2): Linear(in_features=512, out_features=256, bias=True)
+  (z): Linear(in_features=256, out_features=128, bias=True)
+  (h4): Linear(in_features=128, out_features=256, bias=True)
+  (h5): Linear(in_features=256, out_features=512, bias=True)
+  (h6): Linear(in_features=512, out_features=3500, bias=True)
+)
+3943980
+{'dropout_p': 0.2, 'learning_rate': 0.001, 'weight_init': <function xavier_normal_ at 0x7f75b9363a60>, 'hidden_size1': 512, 'hidden_size2': 256, 'z_size': 128}
+Epoch: 0
+train loss: 1.3156655755910007
+valiation loss: 1.5154846906661987
+Epoch: 1
+train loss: 0.9373206875540994
+valiation loss: 1.4513869881629944
+Epoch: 2
+train loss: 0.8834232850508257
+valiation loss: 1.438592791557312
+Epoch: 3
+train loss: 0.8669559847224843
+valiation loss: 1.4301958084106445
+Epoch: 4
+train loss: 0.8680330840024081
+valiation loss: 1.424007773399353
+Epoch: 5
+train loss: 0.8497159047560259
+valiation loss: 1.4191752672195435
+Epoch: 6
+train loss: 0.8416509303179655
+valiation loss: 1.4189714193344116
+Epoch: 7
+train loss: 0.8382879549806769
+valiation loss: 1.4172381162643433
+Epoch: 8
+train loss: 0.8345342820340936
+valiation loss: 1.4144421815872192
+Epoch: 9
+train loss: 0.8197373422709379
+valiation loss: 1.4136016368865967
+Epoch: 10
+train loss: 0.8179666345769708
+valiation loss: 1.410302758216858
+Epoch: 11
+train loss: 0.8058191348205913
+valiation loss: 1.401007056236267
+Epoch: 12
+train loss: 0.8078900304707614
+valiation loss: 1.397286295890808
+Epoch: 13
+train loss: 0.795785822651603
+valiation loss: 1.3988654017448425
+Epoch: 14
+train loss: 0.7916167703541842
+valiation loss: 1.3942272067070007
+Epoch: 15
+train loss: 0.7876073989001188
+valiation loss: 1.3931176662445068
+Epoch: 16
+train loss: 0.7697010148655284
+valiation loss: 1.3795554041862488
+Epoch: 17
+train loss: 0.770213089206002
+valiation loss: 1.3721750974655151
+Epoch: 18
+train loss: 0.7641254690560427
+valiation loss: 1.3713402152061462
+Epoch: 19
+train loss: 0.7499612976204265
+valiation loss: 1.3701320886611938
+Epoch: 20
+train loss: 0.7419410456310619
+valiation loss: 1.362375795841217
+Epoch: 21
+train loss: 0.7346043966033242
+valiation loss: 1.3556768298149109
+Epoch: 22
+train loss: 0.7196385643698953
+valiation loss: 1.3476573824882507
+Epoch: 23
+train loss: 0.7206158096140082
+valiation loss: 1.354053795337677
+Epoch: 24
+train loss: 0.7124452861872587
+valiation loss: 1.3590483665466309
+Epoch: 25
+train loss: 0.7043828693303195
+valiation loss: 1.3501501083374023
+Epoch: 26
+train loss: 0.7165390903299506
+valiation loss: 1.3397976160049438
+Epoch: 27
+train loss: 0.7004000598734076
+valiation loss: 1.3566093444824219
+Epoch: 28
+train loss: 0.6769421371546659
+valiation loss: 1.326274812221527
+Epoch: 29
+train loss: 0.6663602211258628
+valiation loss: 1.3415454626083374
+Epoch: 30
+train loss: 0.6630116592754017
+valiation loss: 1.337879240512848
