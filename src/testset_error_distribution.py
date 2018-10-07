@@ -7,22 +7,26 @@ import torch.nn.init as init
 import torch.nn.functional as F
 from torch.utils.data import Dataset, DataLoader
 
-from z_24dataset import z24Dataset
+from z24_dataset import z24Dataset
 from shallow_model import Model
 
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-batch_size = 100
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu') #
+batch_size = 1000
+w_size = 200
 
-dataset = z24Dataset(mode='testing', window_size=100, normalize=True)
-dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=False, num_workers=4)
+dataset = z24Dataset(mode='testing', window_size=w_size, normalize=True)
+dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=False, num_workers=16)
 
-model = torch.load(f='../results/trained_autoencoder_correct.pt', map_location='cpu')
+model = torch.load(f='../results/trained_shallow_relu200.pt') #, map_location='cpu')
 loss_criterion = torch.nn.MSELoss(reduce=False)
 
 all_window_loss = []
-for X, Y in dataloader:
+for index, (X, Y) in enumerate(dataloader):
+    if index==2:
+        break
+    print(index)
     X_tensor = X.float().to(device)
-    Y_tensor = Y.float().to(device)
+    Y_tensor = Y.float()#.to(device)
 
     batch_size, output_size = Y.shape
     N = 100
@@ -52,4 +56,5 @@ losses_no_outliers = np.sort(all_window_loss)[:int(0.95*len(all_window_loss))]
 
 #TODO add mean error to each sensor
 
-np.save('../tools/testset_error_distribution.npy', losses_no_outliers)
+np.save('../tools/testset_error_distribution_shallow.npy', losses_no_outliers)
+np.save('../tools/testset_error_full.npy', all_window_loss)

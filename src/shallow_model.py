@@ -13,11 +13,11 @@ class Model(nn.Module):
 
     def forward(self, x):
         x = F.dropout(x, p=self.dropout_p, training=True)
-        x = F.leaky_relu(self.h1(x))
+        x = F.relu(self.h1(x))
         x = F.dropout(x, p=self.dropout_p, training=True)
-        x = F.leaky_relu(self.z(x))
+        x = F.relu(self.z(x))
         x = F.dropout(x, p=self.dropout_p, training=True)
-        x = F.leaky_relu(self.h2(x))
+        x = F.relu(self.h2(x))
         x = F.dropout(x, p=self.dropout_p, training=True)
         x = self.h3(x)
         return x

@@ -1,15 +1,15 @@
 import os
+import numpy as np
 import torch
 import torch.nn as nn
 import torch.optim as optim
 import torch.nn.init as init
-import argparse
-
 import torch.nn.functional as F
 from torch.utils.data import Dataset, DataLoader
-from torch.autograd import Variable
+import argparse
 
-import numpy as np
+from z24_dataset import z24Dataset
+from deep_model import Model
 
 print('###Starting script###')
 print('torch version: {}'.format(torch.__version__))
@@ -21,87 +21,16 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 parser = argparse.ArgumentParser()
 parser.add_argument('--batchsize', type=int, default=128)
 parser.add_argument('--nepochs', type=int, default=50)
+parser.add_argument('--wsize', type=int, default=100)
 args = parser.parse_args()
 
 n_epochs = args.nepochs
 batch_size = args.batchsize
+window_size = args.wsize
 
 print('batch size: {}'.format(batch_size))
 print('epochs: {}'.format(n_epochs))
 
-
-class z24Dataset(Dataset):
-    def __init__(self, mode='training', window_size=100, normalize=True):
-        self.window_size = window_size
-        self.slices_per_file = 65536 // self.window_size
-        self.normalize = normalize
-        
-        if mode == 'training':
-            self.index_file = np.loadtxt('../tools/training_set_index.txt',dtype=str)
-        elif mode == 'testing' :
-            self.index_file = np.loadtxt('../tools/test_set_index.txt',dtype=str)
-        elif mode == 'validating':
-            self.index_file = np.loadtxt('../tools/validation_set_index.txt',dtype=str)
-        
-        self.name_index_dict = dict(zip(range(len(self.index_file)),list(self.index_file)))
-        
-        self.env_mean = np.load('../tools/env_mean.npy')
-        self.env_std = np.load('../tools/env_std.npy')
-        self.vibration_mean = np.load('../tools/vibration_mean.npy')
-        self.vibration_std = np.load('../tools/vibration_std.npy')
-
-    def __len__(self):
-        return len(self.index_file) * self.slices_per_file
-
-    def __getitem__(self, index):
-        index_to_read = index // self.slices_per_file
-        file_to_read = self.name_index_dict[index_to_read]
-        index_in_dataframe = (index - index_to_read*self.slices_per_file) * self.window_size
-        
-        file_path_vib = '../data/z24_clean/'+file_to_read+'_vibrations.npy'
-        file_path_env = '../data/z24_clean/'+file_to_read+'_env.npy'
-        
-        memmap_vib = np.memmap(file_path_vib, dtype=np.float64, mode='r', shape=(65536, 7))
-        memmap_env = np.memmap(file_path_env, dtype=np.float64, mode='r', shape=(53,))
-
-        X_environmental = np.array(memmap_env[:])
-        X_vibration_window = np.array(memmap_vib[index_in_dataframe:index_in_dataframe+self.window_size,:])
-
-        if self.normalize:
-            X_vibration_window = (X_vibration_window - self.vibration_mean) / self.vibration_std
-            X_environmental = (X_environmental - self.env_mean) / self.env_std
-        
-        X_vib_and_env = np.append(X_vibration_window.flatten(),X_environmental)
-       
-        return X_vib_and_env, X_vibration_window.flatten()
-        
-class Model(nn.Module):
-    def __init__(self, input_size, hidden_size1, hidden_size2, z_size, output_size, dropout_p):
-        super(Model, self).__init__()
-        self.dropout_p = dropout_p
-
-        self.h1 = nn.Linear(input_size, hidden_size1)
-        self.h2 = nn.Linear(hidden_size1, hidden_size2)
-        self.z  = nn.Linear(hidden_size2, z_size)
-        self.h4 = nn.Linear(z_size, hidden_size2)
-        self.h5 = nn.Linear(hidden_size2, hidden_size1)
-        self.h6 = nn.Linear(hidden_size1, output_size)
-
-    def forward(self, x):
-        x = F.dropout(x, p=self.dropout_p, training=True)
-        x = F.leaky_relu(self.h1(x))
-        x = F.dropout(x, p=self.dropout_p, training=True)
-        x = F.leaky_relu(self.h2(x))
-        x = F.dropout(x, p=self.dropout_p, training=True)
-        x = F.leaky_relu(self.z(x))
-        x = F.dropout(x, p=self.dropout_p, training=True)
-        x = F.leaky_relu(self.h4(x))
-        x = F.dropout(x, p=self.dropout_p, training=True)
-        x = F.leaky_relu(self.h5(x))
-        x = F.dropout(x, p=self.dropout_p, training=True)
-        x = self.h6(x)
-        return x
-        
 class Initializer:
     # to apply xavier_uniform:
     #Initializer.initialize(model=net, initialization=init.xavier_uniform_, gain=init.calculate_gain('relu'))
@@ -125,24 +54,24 @@ def count_parameters(model):
     return sum(p.numel() for p in model.parameters() if p.requires_grad)
 
 #Datasets
-training_dataset = z24Dataset(mode='training', window_size=100, normalize=True)
-training_dataloader = DataLoader(training_dataset, batch_size=batch_size, shuffle=True, num_workers=8)
+training_dataset = z24Dataset(mode='training', window_size=window_size, normalize=True)
+training_dataloader = DataLoader(training_dataset, batch_size=batch_size, shuffle=True, num_workers=16)
 
-validating_dataset = z24Dataset(mode='validating', window_size=100, normalize=True)
-validating_dataloader = DataLoader(validating_dataset, batch_size=batch_size, shuffle=False, num_workers=8)
+validating_dataset = z24Dataset(mode='validating', window_size=window_size, normalize=True)
+validating_dataloader = DataLoader(validating_dataset, batch_size=batch_size, shuffle=False, num_workers=16)
 
 #hyperparameters
 hyperspace = {
 'dropout_p': 0.1,
-'learning_rate': 0.005,
-'weight_init': init.kaiming_uniform_,
-'hidden_size1': 256,
-'hidden_size2': 128,
-'z_size': 64}
+'learning_rate': 0.0003,
+'weight_init': init.orthogonal_,
+'hidden_size1': 512,
+'hidden_size2': 256,
+'z_size': 128}
 
 #define model
-model = Model(input_size=7*100+53,
-              output_size=7*100,
+model = Model(input_size=7*window_size+53,
+              output_size=7*window_size,
               hidden_size1=hyperspace['hidden_size1'],
               hidden_size2=hyperspace['hidden_size2'],
               z_size=hyperspace['z_size'],
@@ -161,6 +90,7 @@ optimizer = torch.optim.Adam(model.parameters(),
                             weight_decay=0,
                             amsgrad=True)
                             
+scheduler = optim.lr_scheduler.MultiStepLR(optimizer, [int(n_epochs*0.7)], gamma=0.1)
 loss_criterion = torch.nn.MSELoss()
 
 
@@ -182,7 +112,7 @@ for epoch in range(n_epochs):
     
         batchloss_train.append(trainloss.item())
         
-    #scheduler.step()
+    scheduler.step()
     train_loss.append(np.mean(batchloss_train))
     
     batchloss_val = []
@@ -194,7 +124,6 @@ for epoch in range(n_epochs):
             valloss = loss_criterion(predicted_Y, Y_val_tensor)
             batchloss_val.append(valloss.item())
         
-    #scheduler.step()
     val_loss.append(np.mean(batchloss_val))
     
     print('Epoch: {}'.format(epoch))
@@ -202,4 +131,4 @@ for epoch in range(n_epochs):
     print('valiation loss: {}'.format(np.mean(batchloss_val)))
     
 #save trained model
-torch.save(model, '../results/trained_autoencoder_bigger.pt')
+torch.save(model, '../results/trained_deep_relu200_20epochs.pt')

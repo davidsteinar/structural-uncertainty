@@ -1,0 +1,78 @@
+###Starting script###
+torch version: 0.4.0
+Number CUDA Devices: 1
+batch size: 1024
+epochs: 50
+Model(
+  (h1): Linear(in_features=753, out_features=512, bias=True)
+  (h2): Linear(in_features=512, out_features=256, bias=True)
+  (z): Linear(in_features=256, out_features=128, bias=True)
+  (h4): Linear(in_features=128, out_features=256, bias=True)
+  (h5): Linear(in_features=256, out_features=512, bias=True)
+  (h6): Linear(in_features=512, out_features=700, bias=True)
+)
+1073980
+{'dropout_p': 0.1, 'learning_rate': 0.0001, 'weight_init': <function orthogonal_ at 0x7f333012ad08>, 'hidden_size1': 512, 'hidden_size2': 256, 'z_size': 128}
+Epoch: 0
+train loss: 1.3198069856885006
+valiation loss: 0.558456106178211
+Epoch: 1
+train loss: 0.9861347221346907
+valiation loss: 0.5091420509518451
+Epoch: 2
+train loss: 0.8863865082711992
+valiation loss: 0.4833347361597708
+Epoch: 3
+train loss: 0.8200794545329572
+valiation loss: 0.4704232626449207
+Epoch: 4
+train loss: 0.7788513942858797
+valiation loss: 0.4596094799970713
+Epoch: 5
+train loss: 0.749287265726529
+valiation loss: 0.4501727740575053
+###Starting script###
+torch version: 0.4.0
+Number CUDA Devices: 1
+batch size: 1024
+epochs: 10
+Model(
+  (h1): Linear(in_features=1453, out_features=512, bias=True)
+  (h2): Linear(in_features=512, out_features=256, bias=True)
+  (z): Linear(in_features=256, out_features=128, bias=True)
+  (h4): Linear(in_features=128, out_features=256, bias=True)
+  (h5): Linear(in_features=256, out_features=512, bias=True)
+  (h6): Linear(in_features=512, out_features=1400, bias=True)
+)
+1791480
+{'dropout_p': 0.1, 'learning_rate': 0.0001, 'weight_init': <function orthogonal_ at 0x7fdbd646ed08>, 'hidden_size1': 512, 'hidden_size2': 256, 'z_size': 128}
+Epoch: 0
+train loss: 1.4884252085255971
+valiation loss: 0.6099970621147236
+Epoch: 1
+train loss: 1.0927252587524876
+valiation loss: 0.5750192816876158
+Epoch: 2
+train loss: 1.0507070927246325
+valiation loss: 0.5455901472345938
+Epoch: 3
+train loss: 1.0248937394092048
+valiation loss: 0.5294280034894682
+Epoch: 4
+train loss: 1.001809555011383
+valiation loss: 0.515722020077303
+Epoch: 5
+train loss: 0.9811841305885194
+valiation loss: 0.5057342650942536
+Epoch: 6
+train loss: 0.9590787479141052
+valiation loss: 0.4985074367971486
+Epoch: 7
+train loss: 0.9381276072421367
+valiation loss: 0.49097703907340134
+Epoch: 8
+train loss: 0.9231405416503549
+valiation loss: 0.4890101517978977
+Epoch: 9
+train loss: 0.9197049505900645
+valiation loss: 0.48701937147710894

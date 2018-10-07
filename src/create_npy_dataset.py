@@ -3,9 +3,12 @@ import zipfile
 import pandas as pd
 import numpy as np
 
+i = 0
 for filename in os.listdir('../data/z24zipped/'): #permanent zipped files
+    i += 1
     stem = filename.replace('.zip','')
-    
+    print(stem)
+    print(i)
     archive = zipfile.ZipFile('../data/z24zipped/'+filename, 'r')
     
     df_list = []

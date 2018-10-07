@@ -1,0 +1,73 @@
+###Starting script###
+torch version: 0.4.0
+Number CUDA Devices: 1
+batch size: 1024
+epochs: 20
+Model(
+  (h1): Linear(in_features=1453, out_features=512, bias=True)
+  (z): Linear(in_features=512, out_features=256, bias=True)
+  (h2): Linear(in_features=256, out_features=512, bias=True)
+  (h3): Linear(in_features=512, out_features=1400, bias=True)
+)
+1725560
+{'dropout_p': 0.1, 'learning_rate': 0.0003, 'weight_init': <function orthogonal_ at 0x7fbfa70bad08>, 'hidden_size1': 512, 'hidden_size2': 256, 'z_size': 256}
+Epoch: 0
+train loss: 1.1006508829153103
+valiation loss: 0.46941938296840663
+Epoch: 1
+train loss: 0.7832528170792089
+valiation loss: 0.43630451815918025
+Epoch: 2
+train loss: 0.7029452148042079
+valiation loss: 0.4152646713933361
+Epoch: 3
+train loss: 0.6630453812363355
+valiation loss: 0.40155436824771423
+Epoch: 4
+train loss: 0.6371905152429489
+valiation loss: 0.3946639495717071
+Epoch: 5
+train loss: 0.6185922739298447
+valiation loss: 0.3856394244790203
+Epoch: 6
+train loss: 0.6041938039082764
+valiation loss: 0.3795429132957373
+Epoch: 7
+train loss: 0.5924942400171489
+valiation loss: 0.3733611712428714
+Epoch: 8
+train loss: 0.5826186270088606
+valiation loss: 0.36730397535873116
+Epoch: 9
+train loss: 0.5724066659349246
+valiation loss: 0.37109967490131596
+Epoch: 10
+train loss: 0.5648376994455854
+valiation loss: 0.35648450518679264
+Epoch: 11
+train loss: 0.558068354614079
+valiation loss: 0.3549016493093615
+Epoch: 12
+train loss: 0.5517154987766475
+valiation loss: 0.3512046885154041
+Epoch: 13
+train loss: 0.5472202347456545
+valiation loss: 0.35017227225068503
+Epoch: 14
+train loss: 0.5417493503621739
+valiation loss: 0.3505122801485444
+Epoch: 15
+train loss: 0.5242514484629467
+valiation loss: 0.34039938589754487
+Epoch: 16
+train loss: 0.5197820667096454
+valiation loss: 0.3393234941589681
+Epoch: 17
+train loss: 0.5174260541013833
+valiation loss: 0.3380363045283888
+Epoch: 18
+train loss: 0.5173735966959941
+valiation loss: 0.3370767664714453
+Epoch: 19
+train loss: 0.5156161486292663
+valiation loss: 0.3383267313273396

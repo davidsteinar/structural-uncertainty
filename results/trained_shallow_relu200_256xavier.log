@@ -1,0 +1,31 @@
+###Starting script###
+torch version: 0.4.0
+Number CUDA Devices: 1
+batch size: 1024
+epochs: 20
+Model(
+  (h1): Linear(in_features=1453, out_features=512, bias=True)
+  (z): Linear(in_features=512, out_features=256, bias=True)
+  (h2): Linear(in_features=256, out_features=512, bias=True)
+  (h3): Linear(in_features=512, out_features=1400, bias=True)
+)
+1725560
+{'dropout_p': 0.1, 'learning_rate': 0.0003, 'weight_init': <function xavier_normal_ at 0x7f0e2a6a9ae8>, 'hidden_size1': 512, 'hidden_size2': 256, 'z_size': 256}
+Epoch: 0
+train loss: 1.1977924397890118
+valiation loss: 0.5102815123801493
+Epoch: 1
+train loss: 0.8700190079330966
+valiation loss: 0.46631149734657273
+Epoch: 2
+train loss: 0.780384784159453
+valiation loss: 0.4452285817922545
+Epoch: 3
+train loss: 0.7261266458941542
+valiation loss: 0.4287840896737978
+Epoch: 4
+train loss: 0.6905865769536383
+valiation loss: 0.41781146051794416
+Epoch: 5
+train loss: 0.6657574184481865
+valiation loss: 0.4095956021330402

@@ -2,7 +2,8 @@ import glob
 import os
 import pandas as pd
 import numpy as np
-from random import shuffle
+import random
+
 random.seed(1992)
 
 files = glob.glob("../data/z24zipped/*")
@@ -16,8 +17,8 @@ for name in sorted_filenames:
     temp = temp.replace('.zip','')
     final.append(temp)
     
-shuffle(final)
-train_split = int(0.8 * len(final))
+random.shuffle(final)
+train_split = int(0.7 * len(final))
 train_index = final[:train_split]
 rest = final[train_split:]
 

@@ -1,0 +1,45 @@
+###Starting script###
+torch version: 0.4.0
+Number CUDA Devices: 1
+batch size: 1024
+epochs: 10
+Model(
+  (h1): Linear(in_features=753, out_features=512, bias=True)
+  (h2): Linear(in_features=512, out_features=256, bias=True)
+  (z): Linear(in_features=256, out_features=128, bias=True)
+  (h4): Linear(in_features=128, out_features=256, bias=True)
+  (h5): Linear(in_features=256, out_features=512, bias=True)
+  (h6): Linear(in_features=512, out_features=700, bias=True)
+)
+1073980
+{'dropout_p': 0.1, 'learning_rate': 0.0001, 'weight_init': <function orthogonal_ at 0x7fe37f67fd08>, 'hidden_size1': 512, 'hidden_size2': 256, 'z_size': 128}
+Epoch: 0
+train loss: 1.3358571395675611
+valiation loss: 0.5798759653236921
+Epoch: 1
+train loss: 1.0068298294729154
+valiation loss: 0.5185036406526146
+Epoch: 2
+train loss: 0.9056229343219129
+valiation loss: 0.4944814006102425
+Epoch: 3
+train loss: 0.8325434875590723
+valiation loss: 0.47947885217498754
+Epoch: 4
+train loss: 0.7917809133775522
+valiation loss: 0.46133572218806057
+Epoch: 5
+train loss: 0.7629912252517266
+valiation loss: 0.4559700830981041
+Epoch: 6
+train loss: 0.7400819475849739
+valiation loss: 0.4440603829715951
+Epoch: 7
+train loss: 0.7182545222304947
+valiation loss: 0.43812326487067316
+Epoch: 8
+train loss: 0.7033397049075713
+valiation loss: 0.4353056059156069
+Epoch: 9
+train loss: 0.6999109750188136
+valiation loss: 0.435301588744098

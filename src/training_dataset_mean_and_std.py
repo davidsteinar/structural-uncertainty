@@ -2,7 +2,6 @@ import glob
 import os
 import pandas as pd
 import numpy as np
-from random import shuffle
 
 
 train_index = np.loadtxt('../tools/training_set_index.txt',dtype=str)
@@ -15,14 +14,21 @@ total_vibration_variance = np.zeros([N,7])
 total_env = np.zeros([N,53])
 
 for index, stem in enumerate(train_index):
-    vibrations = np.load('../data/z24_clean/'+stem+'_vibrations.npy')
+
+    file_path_vib = '../data/z24_clean/'+stem+'_vibrations.npy'
+    memmap_vib = np.memmap(file_path_vib, dtype=np.float64, mode='r', shape=(65536, 7))
+    vibrations = np.array(memmap_vib[:,:])
         
     total_vibration_mean[index,:] = np.mean(vibrations, axis=0)
     total_vibration_variance[index,:] = np.var(vibrations, axis=0)
     
     ###
-    environmental = np.load('../data/z24_clean/'+stem+'_env.npy')
+    file_path_env = '../data/z24_clean/'+stem+'_env.npy'
+    memmap_env = np.memmap(file_path_env, dtype=np.float64, mode='r', shape=(53,))
+    environmental = np.array(memmap_env[:])
+    
     total_env[index,:] = environmental
+    print(index)
     
 final_vibration_mean = np.mean(total_vibration_mean, axis=0)
 final_vibration_variance = np.mean(total_vibration_variance, axis=0)

@@ -1,0 +1,78 @@
+    
+    all_window_loss = np.array(all_window_loss)
+    all_window_loss[all_window_loss > 0.4] = 0.4
+    mean = np.mean(all_window_loss)
+    classification = 0.08202392284314089 < mean
+
+Damage case: 1
+Number of cases: 39
+Number of correct classifications: 10
+Ratio 0.2564102564102564
+
+Damage case: 2
+Number of cases: 118
+Number of correct classifications: 14
+Ratio 0.11864406779661017
+
+Damage case: 3
+Number of cases: 24
+Number of correct classifications: 1
+Ratio 0.041666666666666664
+
+Damage case: 4
+Number of cases: 24
+Number of correct classifications: 9
+Ratio 0.375
+
+Damage case: 5
+Number of cases: 25
+Number of correct classifications: 8
+Ratio 0.32
+
+Damage case: 6
+Number of cases: 24
+Number of correct classifications: 8
+Ratio 0.3333333333333333
+
+Damage case: 7
+Number of cases: 24
+Number of correct classifications: 9
+Ratio 0.375
+
+Damage case: 8
+Number of cases: 96
+Number of correct classifications: 12
+Ratio 0.125
+
+Damage case: 9
+Number of cases: 48
+Number of correct classifications: 9
+Ratio 0.1875
+
+Damage case: 10
+Number of cases: 24
+Number of correct classifications: 8
+Ratio 0.3333333333333333
+
+Damage case: 11
+Number of cases: 81
+Number of correct classifications: 20
+Ratio 0.24691358024691357
+
+Damage case: 12
+Number of cases: 15
+Number of correct classifications: 1
+Ratio 0.06666666666666667
+
+Damage case: 13
+Number of cases: 13
+Number of correct classifications: 4
+Ratio 0.3076923076923077
+
+Damage case: 14
+Number of cases: 31
+Number of correct classifications: 9
+Ratio 0.2903225806451613
+
+
+
